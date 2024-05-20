@@ -16,28 +16,35 @@ export class ProjectService {
   async create(project: CreateProjectDto) {
     const profileFound = await this.profileService.findOne(project.profileId)
     
-    if(!profileFound) return new HttpException('Profile not found', HttpStatus.NOT_FOUND)
-    const projectCreated = this.projectRepository.create(project)
-    await this.projectRepository.save(projectCreated)
- 
-    return projectCreated;
+    if(!profileFound) throw new HttpException('Profile not found', HttpStatus.NOT_FOUND)
+    return await this.projectRepository.save({...project, profile: profileFound})
+
   }
 
   findAll() {
     return this.projectRepository.find();
   }
 
-  findOne(id: number) {
-    return this.projectRepository.findOneBy({id});
-  }
+  async findOne(id: number) {
+    const projectFound = await this.projectRepository.findOneBy({ id });
+    if (!projectFound) throw new HttpException(`Project with ID ${id} not found`, HttpStatus.NOT_FOUND);
+    return projectFound;
+}
 
-  async update(id: number, updateProjectDto: UpdateProjectDto) {
-    await this.projectRepository.update(id, updateProjectDto) 
+async update(id: number, updateProjectDto: UpdateProjectDto) {
+    const projectFound = await this.projectRepository.findOneBy({ id });
+    if (!projectFound) throw new HttpException(`Project with ID ${id} not found`, HttpStatus.NOT_FOUND);
+    
+    await this.projectRepository.update(id, updateProjectDto);
     return updateProjectDto;
-  }
+}
 
-  async remove(id: number) {
-    await this.projectRepository.delete(id)
+async remove(id: number) {
+    const projectFound = await this.projectRepository.findOneBy({ id });
+    if (!projectFound) throw new HttpException(`Project with ID ${id} not found`, HttpStatus.NOT_FOUND);
+    
+    await this.projectRepository.delete(id);
     return `The project with the id #${id} was deleted`;
-  }
+}
+
 }

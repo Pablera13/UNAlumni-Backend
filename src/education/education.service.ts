@@ -18,28 +18,33 @@ export class EducationService {
    async create(education: CreateEducationDto) {
     const profileFound = await this.profileService.findOne(education.profileId)
 
-    if(!profileFound) return new HttpException('Profile not found', HttpStatus.NOT_FOUND)
-    
-     const educationCreated =  this.educationRepository.create(education)
-     await this.educationRepository.save(educationCreated);
-    return educationCreated;
+    if(!profileFound) throw new HttpException('Profile not found', HttpStatus.NOT_FOUND)
+    return await this.educationRepository.save({...education, profile: profileFound})
+
   }
 
   findAll() {
     return this.educationRepository.find();
   }
 
-  findOne(id: number) {
-    return this.educationRepository.findOneBy({id});
-  }
+  async findOne(id: number) {
+    const educationFound = await this.educationRepository.findOneBy({ id });
+    if (!educationFound) throw new HttpException(`Education with ID ${id} not found`, HttpStatus.NOT_FOUND);
+    return educationFound;
+}
 
-  async update(id: number, updateEducationDto: UpdateEducationDto) {
-    await this.educationRepository.update(id, updateEducationDto)
-    return updateEducationDto;
-  }
+async update(id: number, updateEducationDto: UpdateEducationDto) {
+    const educationFound = await this.educationRepository.findOneBy({ id });
+    if (!educationFound) throw new HttpException(`Education with ID ${id} not found`, HttpStatus.NOT_FOUND);
+    await this.educationRepository.update(id, updateEducationDto);
+    return await this.educationRepository.findOneBy({ id });
+}
 
-  async remove(id: number) {
-    await this.educationRepository.delete(id)
+async remove(id: number) {
+    const educationFound = await this.educationRepository.findOneBy({ id });
+    if (!educationFound) throw new HttpException(`Education with ID ${id} not found`, HttpStatus.NOT_FOUND);
+    await this.educationRepository.delete(id);
     return `The education with the id #${id} was deleted`;
-  }
+}
+
 }

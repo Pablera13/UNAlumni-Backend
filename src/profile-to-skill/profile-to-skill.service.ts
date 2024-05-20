@@ -18,9 +18,9 @@ export class ProfileToSkillService {
   async create(relation: CreateProfileToSkillDto) {
     const profileFound = await this.profileService.findOne(relation.profileId)
     const skillFound = await this.skillService.findOne(relation.skillId)
-    if(!profileFound) {return new HttpException('Profile not found', HttpStatus.NOT_FOUND)
+    if(!profileFound) {throw new HttpException('Profile not found', HttpStatus.NOT_FOUND)
     }
-    else if(!skillFound) {return new HttpException('Skill not found', HttpStatus.NOT_FOUND)
+    else if(!skillFound) {throw new HttpException('Skill not found', HttpStatus.NOT_FOUND)
     }
     
     const relationCreated = this.profileToSkillRepository.create(relation)

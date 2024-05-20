@@ -15,8 +15,8 @@ export class OfferToSkillService {
   ){}
   
   async create(createOfferToSkillDto: CreateOfferToSkillDto) {
-    const offerFound = this.offerService.findOne(createOfferToSkillDto.offerId)
-    const skillFound = this.skillService.findOne(createOfferToSkillDto.skillId)
+    const offerFound = await this.offerService.findOne(createOfferToSkillDto.offerId)
+    const skillFound = await this.skillService.findOne(createOfferToSkillDto.skillId)
     
     if(!offerFound){return new HttpException('Offer not found', HttpStatus.NOT_FOUND)
     }

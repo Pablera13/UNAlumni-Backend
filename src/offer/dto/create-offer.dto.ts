@@ -1,10 +1,20 @@
+import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
+
 export class CreateOfferDto {
-    
-    job: string
 
-    description: string
+    @IsNotEmpty()
+    @IsString()
+    job: string;
 
-    status: string
+    @IsNotEmpty()
+    @IsString()
+    description: string;
 
-    companyId: number
+    @IsNotEmpty()
+    @IsString()
+    status: string;
+
+    @IsNotEmpty()
+    @IsNumber()
+    companyId: number;
 }

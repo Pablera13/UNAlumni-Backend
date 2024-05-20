@@ -1,5 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Company } from "src/company/entities/company.entity";
+import { Profile } from "src/profile/entities/profile.entity";
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('users')
 export class User {
@@ -11,5 +13,14 @@ export class User {
     username: string;
 
     @Column()
-    email:string;
+    password: string
+
+    @Column()
+    email: string;
+
+    @OneToOne(() => Company, company => company.user)
+    company: Company;
+
+    @OneToOne(() => Profile, profile => profile.user)
+    profile: Profile;
 }

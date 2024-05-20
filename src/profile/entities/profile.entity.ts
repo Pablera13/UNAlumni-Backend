@@ -2,7 +2,8 @@ import { Education } from "src/education/entities/education.entity"
 import { ProfileToLanguage } from "src/profile-to-language/entities/profile-to-language.entity"
 import { ProfileToSkill } from "src/profile-to-skill/entities/profile-to-skill.entity"
 import { Project } from "src/project/entities/project.entity"
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm"
+import { User } from "src/users/entities/user.entity"
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm"
 
 @Entity('profile')
 export class Profile {
@@ -23,12 +24,6 @@ export class Profile {
     
     @Column()
     birthdate: Date
-    
-    @Column()
-    email: string
-
-    @Column()
-    password: string
 
     @Column()
     image: string
@@ -62,4 +57,8 @@ export class Profile {
 
     @OneToMany(() => ProfileToLanguage, profileToLanguage => profileToLanguage.profile)
     languages: ProfileToLanguage[]
+
+    @OneToOne(() => User, {eager: true})
+    @JoinColumn()
+    user: User;
 } 

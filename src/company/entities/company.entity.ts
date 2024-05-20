@@ -1,5 +1,6 @@
 import { Offer } from "src/offer/entities/offer.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "src/users/entities/user.entity";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('companies')
 export class Company {
@@ -28,10 +29,11 @@ export class Company {
     @Column()
     website: string
 
-    @Column()
-    password: string
-
     @OneToMany(()=> Offer, offer => offer.company)
     offers: Offer[]
+
+    @OneToOne(() => User, {eager: true})
+    @JoinColumn()
+    user: User;
 
 }

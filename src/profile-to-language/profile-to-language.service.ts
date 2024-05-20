@@ -14,12 +14,12 @@ export class ProfileToLanguageService {
   private languageService: LanguageService
   ){}
   async create(profileToLanguage: CreateProfileToLanguageDto) {
-    const profileFound = this.profileService.findOne(profileToLanguage.profileId)
-    const languageFound = this.languageService.findOne(profileToLanguage.languageId)
+    const profileFound = await this.profileService.findOne(profileToLanguage.profileId)
+    const languageFound = await this.languageService.findOne(profileToLanguage.languageId)
     
-    if(!profileFound){return new HttpException('Profile not found', HttpStatus.NOT_FOUND)
+    if(!profileFound){throw new HttpException('Profile not found', HttpStatus.NOT_FOUND)
     }
-    else if(!languageFound) {return new HttpException('Language not found', HttpStatus.NOT_FOUND)
+    else if(!languageFound) {throw new HttpException('Language not found', HttpStatus.NOT_FOUND)
     }
     const relationCreated = this.profileToLanguageRepository.create(profileToLanguage)
     await this.profileToLanguageRepository.save(relationCreated)
@@ -37,7 +37,6 @@ export class ProfileToLanguageService {
         languageId: lId
       },
     })
-    //return `This action returns a #${id} profileToLanguage`;
   }
 
   async update(id1: number, id2: number, updateProfileToLanguageDto: UpdateProfileToLanguageDto) {  

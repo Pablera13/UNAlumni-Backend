@@ -1,12 +1,16 @@
-import { Profile } from "src/profile/entities/profile.entity"
-import { Skill } from "src/skill/entities/skill.entity"
+import { IsNotEmpty, IsString, IsInt } from 'class-validator';
 
 export class CreateProfileToSkillDto {
 
-    level:string
+    @IsNotEmpty()
+    @IsString()
+    level: string
 
+    @IsNotEmpty()
+    @IsInt()
     profileId: number
 
+    @IsNotEmpty()
+    @IsInt()
     skillId: number
-    
 }

@@ -11,13 +11,11 @@ export class OfferService {
   constructor(@InjectRepository(Offer) private offerRepository: Repository<Offer>,
   private companyService: CompanyService
   ){}
-  
+
   async create(createOfferDto: CreateOfferDto) {
-    const companyFound = this.companyService.findOne(createOfferDto.companyId)
-    if(!companyFound) return new HttpException('Company not found', HttpStatus.NOT_FOUND )
-    const offerCreated = this.offerRepository.create(createOfferDto)
-    await this.offerRepository.save(offerCreated)
-    return offerCreated;
+    const companyFound = await this.companyService.findOne(createOfferDto.companyId)
+    if(!companyFound) throw new HttpException('Company not found', HttpStatus.NOT_FOUND )
+    return await this.offerRepository.save({...createOfferDto, company: companyFound})
   }
 
   findAll() {
@@ -26,17 +24,27 @@ export class OfferService {
     });
   }
 
-  findOne(id: number) {
-    return this.offerRepository.findOneBy({id});
-  }
+  async findOne(id: number) {
+    const offerFound = await this.offerRepository.findOne({
+        where: { id },
+        relations: ['skills.skill']
+    });
+    if (!offerFound) throw new HttpException(`Offer with ID ${id} not found`, HttpStatus.NOT_FOUND);
+    return offerFound;
+}
 
-  async update(id: number, updateOfferDto: UpdateOfferDto) {
-    await this.offerRepository.update(id,updateOfferDto)
+async update(id: number, updateOfferDto: UpdateOfferDto) {
+    const offerFound = await this.offerRepository.findOneBy({ id });
+    if (!offerFound) throw new HttpException(`Offer with ID ${id} not found`, HttpStatus.NOT_FOUND);
+    await this.offerRepository.update(id, updateOfferDto);
     return updateOfferDto;
-  }
+}
 
-  async remove(id: number) {
-    await this.offerRepository.delete(id)
+async remove(id: number) {
+    const offerFound = await this.offerRepository.findOneBy({ id });
+    if (!offerFound) throw new HttpException(`Offer with ID ${id} not found`, HttpStatus.NOT_FOUND);
+    await this.offerRepository.delete(id);
     return `The offer with the id #${id} was deleted`;
-  }
+}
+
 }

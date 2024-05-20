@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { join } from 'path';
 
 import dbConfig from 'src/config/database.config';
 import { MySqlConfig } from './config/mysql.config';
@@ -24,22 +25,40 @@ import * as dotenv from 'dotenv'
 
 dotenv.config()
 
+// @Module({
+//   imports: [
+//     ConfigModule.forRoot({
+//       isGlobal: true,
+//       load: [dbConfig],
+//       envFilePath: [`./envs/.env.${process.env.APP_ENV}`],
+//     }),
+//     TypeOrmModule.forRootAsync({
+//       imports: [ConfigModule],
+//       useClass:MySqlConfig,
+//       inject:[MySqlConfig]
+//       // useFactory: async (configService: ConfigService) => ({
+//       //   ...(await configService.get('database')),
+//       // }),
+//       // inject: [ConfigService],
+//     }),
+
+
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: [dbConfig],
-      envFilePath: [`./envs/.env.${process.env.APP_ENV}`],
-    }),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useClass:MySqlConfig,
-      inject:[MySqlConfig]
-      // useFactory: async (configService: ConfigService) => ({
-      //   ...(await configService.get('database')),
-      // }),
-      // inject: [ConfigService],
+      useFactory: async () => ({
+        type: 'mysql',
+        host: 'localhost',
+        port: 3306,
+        username: 'root',
+        password: '',
+        database: 'unalumni_test',
+        entities: [join(__dirname, '**', '*.entity.js')],
+        synchronize: true, 
+        retryAttempts: 3,
+      }),
     }),
+
     UsersModule,
     ProfileModule,
     EducationModule,
