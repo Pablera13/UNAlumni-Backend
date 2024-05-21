@@ -18,9 +18,9 @@ export class OfferToSkillService {
     const offerFound = await this.offerService.findOne(createOfferToSkillDto.offerId)
     const skillFound = await this.skillService.findOne(createOfferToSkillDto.skillId)
     
-    if(!offerFound){return new HttpException('Offer not found', HttpStatus.NOT_FOUND)
+    if(!offerFound){throw new HttpException('Offer not found', HttpStatus.NOT_FOUND)
     }
-    else if(!skillFound) {return new HttpException('Skill not found', HttpStatus.NOT_FOUND)
+    else if(!skillFound) {throw new HttpException('Skill not found', HttpStatus.NOT_FOUND)
     }
     const relationCreated = this.offerToSkillRepository.create(createOfferToSkillDto)
     await this.offerToSkillRepository.save(relationCreated)
@@ -51,10 +51,11 @@ export class OfferToSkillService {
   }
 
   async remove(id1: number, id2: number) {
-    await this.offerToSkillRepository.createQueryBuilder()
+    await this.offerToSkillRepository.createQueryBuilder().delete().from(OfferToSkill)
     .where('offerId = :offerId', {offerId: id1})
     .andWhere('skillId = :skillId', {skillId: id2})
     .execute()
     return `The relation with the offerId #${id1} and the skillId #${id2} was deleted`;
   }
+
 }

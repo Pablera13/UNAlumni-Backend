@@ -14,6 +14,7 @@ async function bootstrap() {
   })
   app.useGlobalPipes(MyValidationPipe);
 
+  //para efectos de pruebas
   app.enableCors({
     origin: '*',
     allowedHeaders: '*',

@@ -1,5 +1,6 @@
 import { OfferToSkill } from "src/offer-to-skill/entities/offer-to-skill.entity";
 import { ProfileToSkill } from "src/profile-to-skill/entities/profile-to-skill.entity";
+import { ProjectToSkill } from "src/project-to-skill/entities/project-to-skill.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('skills')
@@ -19,4 +20,7 @@ export class Skill {
 
     @OneToMany(()=> OfferToSkill, offerToSkill => offerToSkill.skill)
     relationToOffer: OfferToSkill[]
+
+    @OneToMany(()=> ProjectToSkill, projectToSkill => projectToSkill.skill)
+    relationToProject: ProjectToSkill[]
 }

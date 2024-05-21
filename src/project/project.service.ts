@@ -22,13 +22,18 @@ export class ProjectService {
   }
 
   findAll() {
-    return this.projectRepository.find();
+    return this.projectRepository.find({
+      relations: ['skills.skill']
+    });
   }
 
   async findOne(id: number) {
-    const projectFound = await this.projectRepository.findOneBy({ id });
-    if (!projectFound) throw new HttpException(`Project with ID ${id} not found`, HttpStatus.NOT_FOUND);
-    return projectFound;
+    const offerFound = await this.projectRepository.findOne({
+        where: { id },
+        relations: ['skills.skill']
+    });
+    if (!offerFound) throw new HttpException(`Project with ID ${id} not found`, HttpStatus.NOT_FOUND);
+    return offerFound;
 }
 
 async update(id: number, updateProjectDto: UpdateProjectDto) {

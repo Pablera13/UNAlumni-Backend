@@ -1,5 +1,6 @@
 import { Profile } from "src/profile/entities/profile.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { ProjectToSkill } from "src/project-to-skill/entities/project-to-skill.entity";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('projects')
 export class Project {
@@ -25,4 +26,6 @@ export class Project {
     @ManyToOne(()=> Profile, (profile) => profile.projects)
     owner: Profile;
 
+    @OneToMany(()=> ProjectToSkill, projectToSkill => projectToSkill.project)
+    skills: ProjectToSkill[]
 }

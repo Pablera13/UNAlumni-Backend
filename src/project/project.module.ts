@@ -8,6 +8,7 @@ import { ProfileModule } from 'src/profile/profile.module';
 @Module({
   imports:[TypeOrmModule.forFeature([Project]), ProfileModule],
   controllers: [ProjectController],
-  providers: [ProjectService]
+  providers: [ProjectService],
+  exports: [ProjectService]
 })
 export class ProjectModule {}

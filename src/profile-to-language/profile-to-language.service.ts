@@ -49,7 +49,8 @@ export class ProfileToLanguageService {
 
   async remove(id1: number, id2:number) {
     await this.profileToLanguageRepository.createQueryBuilder().delete().from(ProfileToLanguage)
-    .where('profileId = :profileId', {profileId: id1}).andWhere('languageId = :languageId',{languageId: id2})
+    .where('profileId = :profileId', {profileId: id1})
+    .andWhere('languageId = :languageId',{languageId: id2})
     .execute()
     return `The relation with the profileId #${id1} and the languageId #${id2}was deleted`;
   }

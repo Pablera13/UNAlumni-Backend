@@ -53,7 +53,8 @@ export class ProfileToSkillService {
 
   async remove(id1: number, id2: number) {
     await this.profileToSkillRepository.createQueryBuilder().delete().from(ProfileToSkill)
-    .where('profileId = :profileId', {profileId: id1}).andWhere('skillId = :skillId', {skillId: id2})
+    .where('profileId = :profileId', {profileId: id1})
+    .andWhere('skillId = :skillId', {skillId: id2})
     .execute()
     return `The relation with the profileId #${id1} and the skillId #${id2} was deleted`;
   }

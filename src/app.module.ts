@@ -19,6 +19,7 @@ import { ProfileToLanguageModule } from './profile-to-language/profile-to-langua
 import { CompanyModule } from './company/company.module';
 import { OfferModule } from './offer/offer.module';
 import { OfferToSkillModule } from './offer-to-skill/offer-to-skill.module';
+import { ProjectToSkillModule } from './project-to-skill/project-to-skill.module';
 
 
 import * as dotenv from 'dotenv'
@@ -69,7 +70,8 @@ dotenv.config()
     ProfileToLanguageModule,
     CompanyModule,
     OfferModule,
-    OfferToSkillModule],
+    OfferToSkillModule,
+    ProjectToSkillModule],
   controllers: [AppController],
   providers: [AppService],
 })
